@@ -28,15 +28,17 @@ export function QuoteOfTheDay() {
           setLoading(false)
           return
         }
-
+        console.log("hi")
         // Fetch a new quote if no cached quote exists
-        const response = await fetch("https://api.quotable.io/random")
+        // const response = await fetch("https://api.quotable.io/random")
+        const response = await fetch("https://dummyjson.com/quotes/random")
+        // const response = await fetch("/api/quote");
         console.log(response)
         if (!response.ok) throw new Error("Failed to fetch quote")
 
         const data = await response.json()
         const quoteData = {
-          content: data.content,
+          content: data.quote,
           author: data.author,
         }
 
