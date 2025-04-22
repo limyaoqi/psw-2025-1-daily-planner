@@ -38,7 +38,7 @@ interface Task {
 
 export function DailyPlanner() {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-  const [timeBlocks, setTimeBlocks] = useState<Task[]>(DEFAULT_TIME_BLOCKS);
+  const [timeBlocks, setTimeBlocks] = useState<Task[]>([...DEFAULT_TIME_BLOCKS]);
   const { theme, setTheme } = useTheme();
 
   const [mounted, setMounted] = useState(false);
@@ -50,23 +50,26 @@ export function DailyPlanner() {
   // Format the selected date as a string for storage key
   const dateKey = format(selectedDate, "yyyy-MM-dd");
 
-  // Load tasks from local storage on component mount and when date changes
+  // Load tasks from local storage when date changes
   useEffect(() => {
     const savedTasks = localStorage.getItem(`daily-planner-${dateKey}`);
+    
     if (savedTasks) {
       setTimeBlocks(JSON.parse(savedTasks));
     } else {
       // Reset to default time blocks if no saved data for this date
-      setTimeBlocks(DEFAULT_TIME_BLOCKS);
+      setTimeBlocks([...DEFAULT_TIME_BLOCKS]); // Create a new array reference
     }
   }, [dateKey]);
 
   // Save tasks to local storage whenever they change
   useEffect(() => {
-    localStorage.setItem(
-      `daily-planner-${dateKey}`,
-      JSON.stringify(timeBlocks)
-    );
+    if (timeBlocks) { // Only save if timeBlocks exists
+      localStorage.setItem(
+        `daily-planner-${dateKey}`,
+        JSON.stringify(timeBlocks)
+      );
+    }
   }, [timeBlocks, dateKey]);
 
   // Update a task

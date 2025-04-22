@@ -1,8 +1,7 @@
 "use client"
 
 import type React from "react"
-
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Draggable } from "@hello-pangea/dnd"
 import { GripVertical } from "lucide-react"
 
@@ -21,6 +20,11 @@ interface TimeBlockProps {
 
 export function TimeBlock({ id, index, time, hour, task, updateTask, isToday }: TimeBlockProps) {
   const [currentTask, setCurrentTask] = useState(task)
+
+  // Sync internal state with props when they change
+  useEffect(() => {
+    setCurrentTask(task);
+  }, [task]);
 
   // Get current hour for color coding
   const currentHour = new Date().getHours()
@@ -78,4 +82,3 @@ export function TimeBlock({ id, index, time, hour, task, updateTask, isToday }: 
     </Draggable>
   )
 }
-
